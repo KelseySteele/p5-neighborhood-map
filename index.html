@@ -5,10 +5,26 @@
      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-l8J-1yZsmU4jAXluphw5gN-qUSh_uRA"></script>
   </head>
-  <body>
-  <div class="map" id="map" data-bind="googlemap: { places: location }"></div>
 
-  <script src="js/lib/knockout-3.3.0.js"></script>
+  <body>
+      <div id="container">
+        <div id ="map"></div>
+        <div id="sidebar">
+            <h2 class= "title" >Kind Places in Portland, Oregon</h2>
+              <ul data-bind= "foreach: locationsArray">
+                <li>
+                  <h3 class= "placeName" data-bind= "text: name"></h3>
+                  <p class = "placeInfo" data-bind= "text: hours"></p>
+                  <p class = "placeInfo" data-bind= "text: address"></p>
+                  <p class = "placeInfo" data-bind= "text: zipcode"></p>
+                </li> 
+              </ul>
+        </div>
+    </div><!--end of container-->
+    <script src="js/lib/knockout-3.3.0.js"></script>
   <script src="js/main.js"></script>
+
   </body>
 </html>
+
+

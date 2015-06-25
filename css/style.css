@@ -1,5 +1,50 @@
- html, body, #map {
-                            height: 100%;
-                            margin: 0;
-                            padding: 0;
-                          }
+
+html, body, #map {
+                /*height: 100%;*/
+                margin: 0;
+                padding: 0;
+}
+ 
+#container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+#sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  width: 300px;
+  height: 100%;
+  background-color: white;
+  opacity: .8;
+  padding-left: 10px;
+  overflow: scroll;
+}
+
+.title {
+  color: #006666;
+  font-family: sans-serif;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.placeName {
+  color: #666666;
+  font-family: sans-serif;
+  font-size: 1.2em;
+  padding-bottom: 0px;
+  margin-bottom: -7px;
+}
+
+.placeInfo {
+  line-height: 0.5;
+  font-family: sans-serif;
+  font-size: .95em;
+}
+
+ul{
+   list-style-type: none;
+}

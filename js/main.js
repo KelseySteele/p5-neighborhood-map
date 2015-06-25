@@ -3,7 +3,7 @@
 var places = [
         {
             name: "Blossoming Lotus",
-            hours: "11:00 am Ð 9:00 pm",
+            hours: "11:00 am to 9:00 pm",
             address: "1713 NE 15th Ave",
             zipcode: "97212",
             url: "http://blpdx.com",
@@ -12,7 +12,7 @@ var places = [
         },
         {
             name: "Food Fight! Grocery",
-            hours: "10:00 am Ð 8:00 pm",
+            hours: "10:00 am to 8:00 pm",
             address: "1217 SE Stark St",
             zipcode: "97214",
             url: "http://www.foodfightgrocery.com",
@@ -21,7 +21,7 @@ var places = [
         },
         {
             name: "Harlow",
-            hours: "8:00 am Ð 9:00 pm",
+            hours: "8:00 am to 9:00 pm",
             address: "3632 SE Hawthorne Blvd",
             zipcode: "97214",
             url: "http://www.harlowpdx.com/",
@@ -30,7 +30,7 @@ var places = [
         },
         {
             name: "Herbivore Clothing Co.",
-            hours: "10:00 am Ð 6:00 pm",
+            hours: "10:00 am to 6:00 pm",
             address: "1211 SE Stark St",
             zipcode: "97209",
             url: "http://www.herbivoreclothing.com/",
@@ -39,7 +39,7 @@ var places = [
         },
         {
             name: "Petunia's Pies & Pastries",
-            hours: "9:00 am Ð 7:00 pm",
+            hours: "9:00 am to 7:00 pm",
             address: "610 SW 12th Ave",
             zipcode: "97205",
             url: "http://petuniaspiesandpastries.com/",
@@ -48,7 +48,7 @@ var places = [
         },
         {
             name: "Portobello Vegan Trattoria",
-            hours: "5:30 pm Ð 9:00 pm",
+            hours: "5:30 pm to 9:00 pm",
             address: "1125 SE Division St",
             zipcode: "97214",
             url: "http://portobellopdx.com/",
@@ -57,7 +57,7 @@ var places = [
         },
         {
             name: "Prasad",
-            hours: "7:30 am Ð 8:00 pm",
+            hours: "7:30 am to 8:00 pm",
             address: "925 NW Davis St",
             zipcode: "97209",
             url: "http://www.prasadcuisine.com/",
@@ -70,13 +70,13 @@ var places = [
 
 //object constructor.
 var Location = function(data){
-    this.name = data.name;
-    this.hours = data.hours;
-    this.address = data.address;
-    this.zipcode = data.zipcode;
-    this.url = data.url;
-    this.latitude = data.latitude;
-    this.longitude = data.longitude;
+    this.name = ko.observable(data.name);
+    this.hours = ko.observable(data.hours);
+    this.address = ko.observable(data.address);
+    this.zipcode = ko.observable(data.zipcode);
+    this.url = ko.observable(data.url);
+    this.latitude = ko.observable(data.latitude);
+    this.longitude = ko.observable(data.longitude);
 };
 
 /*--------ViewModel--------*/
@@ -85,56 +85,64 @@ var ViewModel = function(){
 
     //Variables
     var self = this; //Self is the ViewModel Object
-    this.locationsArray = []; //not sure why adding this here worked? this is the individual locations within places? 
+    this.locationsArray = ko.observableArray([]); //not sure why adding this here worked? this is the individual locations within places? 
     markersArray = []; 
     //Marker icons based on selection state
-    var selectedIcon = 'https://www.google.com/mapfiles/marker_green.png',
-        normalIcon = 'http://www.google.com/mapfiles/marker.png';
+    var selectedIcon = 'http://www.google.com/mapfiles/marker.png',
+        normalIcon = 'https://www.google.com/mapfiles/marker_green.png';
 
     //pushes places' property values into the array called locationsArray, so data can be used for markers
     places.forEach(function(locationItem){
-            self.locationsArray.push(new Location(locationItem));
+            self.locationsArray().push(new Location(locationItem));
     });
     
     //Methods
     
+    // Makes the map height equal to the hight of the browser window. Google map requires that the hight of the map be defined in pixels
+    //and not as 100%. 
+    self.resizeMap = function(){
+            $(function(){ //why is there a function within a function here? 
+                $("#map").css("height", $(window).height());
+        });
+    }
     //Draw the map
-    this.drawMap = function(){ //not sure about the this here?
+    self.drawMap = function(){ //not sure about the this here?
         
-        var portland = new google.maps.LatLng(45.5224000, -122.654422);
+        var portland = new google.maps.LatLng(45.5224000, -122.680004);
         var mapOptions = {
             zoom: 13,
             center: portland,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
+        //Add infoWindow to map
         var infowindow = new google.maps.InfoWindow({
             content: contentString
             });
         
         var i= 0;
-        for (i=0; i< locationsArray.length; i++) {
+        for (i=0; i< self.locationsArray().length; i++) {
             //code
 
          //Add infoWindow
         var contentString = '<div id="content">' +
-            '<h3>' + locationsArray[i].name + '</h3>' +
-            '<p>Address: ' + locationsArray[i].address + '</p>' +
-            '<p>Zipcode: ' + locationsArray[i].zipcode + '</p>' +
-            '<p>Hours: ' + locationsArray[i].hours + '</p>' +
-            '<p>' + locationsArray[i].url + '</p>' +
+            '<h3>' + self.locationsArray()[i].name() + '</h3>' +
+            '<p>Address: ' + self.locationsArray()[i].address() + '</p>' +
+            '<p>Zipcode: ' + self.locationsArray()[i].zipcode() + '</p>' +
+            '<p>Hours: ' + self.locationsArray()[i].hours() + '</p>' +
+            '<p>' + self.locationsArray()[i].url() + '</p>' +
             '</div>';
-        //Add infoWindow to map
+       
 
-        
-        var currentLatLng = new google.maps.LatLng(locationsArray[i].latitude, locationsArray[i].longitude);
+        //Adds latitude and longitude value to each marker
+        var currentLatLng = new google.maps.LatLng(self.locationsArray()[i].latitude(), self.locationsArray()[i].longitude());
 
         //Add markers to map
         var marker = new google.maps.Marker({
             position: currentLatLng,
             map: map,
-            title: locationsArray[i].name
+            title: self.locationsArray()[i].name(),
+            icon: normalIcon
         });
         
         //Draws marker on the map
@@ -165,20 +173,24 @@ var ViewModel = function(){
         })(marker, contentString, infowindow)); 
                 
         }; //End of loop for all locations within locationsArray
-        
 
     } //End of drawMap
 
-     //Draw the map
+    // Executes methods and listeners
+    
+    //Resize the map to be same size as window onload.
+    self.resizeMap();
+    //Resize map when user resizes map
+    window.addEventListener('resize', self.resizeMap);
+    //Draw the map
      google.maps.event.addDomListener(window, 'load', this.drawMap);
+     
+
 
 }; //End of ViewModel
 
 
-
-ViewModel();
-
-
+ko.applyBindings(new ViewModel());
 
 
 
