@@ -24,6 +24,13 @@ html, body, #map {
   overflow: scroll;
 }
 
+.search {
+  font-family: sans-serif;
+  color: #666666;
+  font-size: 1.0em;
+  text-align: center;
+}
+
 .title {
   color: #006666;
   font-family: sans-serif;
@@ -37,6 +44,7 @@ html, body, #map {
   font-size: 1.2em;
   padding-bottom: 0px;
   margin-bottom: -7px;
+  cursor: pointer;
 }
 
 .placeInfo {

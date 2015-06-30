@@ -11,9 +11,10 @@
         <div id ="map"></div>
         <div id="sidebar">
             <h2 class= "title" >Kind Places in Portland, Oregon</h2>
-              <ul data-bind= "foreach: locationsArray">
+            <p class= "search">Search: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></p>
+              <ul data-bind= "foreach: filteredItems">
                 <li>
-                  <h3 class= "placeName" data-bind= "text: name"></h3>
+                  <h3 class= "placeName" data-bind= "text: name, click: $parent.showMarker"></h3>
                   <p class = "placeInfo" data-bind= "text: hours"></p>
                   <p class = "placeInfo" data-bind= "text: address"></p>
                   <p class = "placeInfo" data-bind= "text: zipcode"></p>

@@ -86,15 +86,20 @@ var ViewModel = function(){
     //Variables
     var self = this; //Self is the ViewModel Object
     this.locationsArray = ko.observableArray([]); //not sure why adding this here worked? this is the individual locations within places? 
+    self.filter = ko.observable(""); // Stores the search box text. It is intitially empty
     markersArray = []; 
     //Marker icons based on selection state
     var selectedIcon = 'http://www.google.com/mapfiles/marker.png',
-        normalIcon = 'https://www.google.com/mapfiles/marker_green.png';
+        normalIcon = 'https://www.google.com/mapfiles/marker_green.png',
+        selectedName = 'purple',
+        normalName = '#666666';
 
     //pushes places' property values into the array called locationsArray, so data can be used for markers
     places.forEach(function(locationItem){
             self.locationsArray().push(new Location(locationItem));
     });
+    
+    
     
     //Methods
     
@@ -104,7 +109,7 @@ var ViewModel = function(){
             $(function(){ //why is there a function within a function here? 
                 $("#map").css("height", $(window).height());
         });
-    }
+    };
     //Draw the map
     self.drawMap = function(){ //not sure about the this here?
         
@@ -121,6 +126,7 @@ var ViewModel = function(){
             });
         
         var i= 0;
+        
         for (i=0; i< self.locationsArray().length; i++) {
             //code
 
@@ -151,31 +157,79 @@ var ViewModel = function(){
         //Push each marker into markersArray
         markersArray.push(marker);
         
-        //Reset previously clicked markers back to normalIcon
-        var markerReset = function(){
-            for(var j = 0; j < markersArray.length; j++){
-                markersArray[j].setIcon(normalIcon);
-            }
-        };
-        
         //Reset icon to normalIcon when infowindow is closed.
-        google.maps.event.addListener(infowindow, 'closeclick', markerReset);
+        google.maps.event.addListener(infowindow, 'closeclick', self.markerReset);
 
         //Use closure on click event to display correct infowindow
         google.maps.event.addListener(marker,'click', (function(marker,contentString,infowindow){
             return function() {
-                markerReset();
+                //Resets all markers back to normalIcon, so only one is red.
+                self.nameReset(); //Turns names back to gray when new marker is clicked.
+                self.markerReset();
                 infowindow.setContent(contentString);
                 infowindow.open(map,marker);
-                //change the marker when clicked
+                //Change the marker when clicked
                 this.setIcon(selectedIcon);
             };
-        })(marker, contentString, infowindow)); 
+        })(marker, contentString, infowindow));
+        
                 
-        }; //End of loop for all locations within locationsArray
+        } //End of loop for all locations within locationsArray
+        
+        
 
-    } //End of drawMap
+    }; //End of drawMap
+    
+    //Reset previously clicked place names in sidebar back to normal gray color. 
+    self.nameReset = function(){
+                $(".placeName").css("color", normalName);
+        };
+    
+    //Reset previously clicked markers back to normalIcon
+    self.markerReset = function(){
+        for(var j = 0; j < markersArray.length; j++){
+            markersArray[j].setIcon(normalIcon);
+        }
+    };
+    
 
+    //When name of location in sidebar is clicked, marker turns red.
+    self.showMarker = function(data, event){
+        var nameClicked = $(event.target).text();
+        self.nameReset();//Reset names' color of locations back to gray.
+        self.markerReset(); //Reset markers to normalIcon.
+        for (i=0; i< markersArray.length; i++) {
+            if (nameClicked === markersArray[i].title) {
+                markersArray[i].setIcon(selectedIcon);
+               // Changes color of place name to purple when clicked.
+            $(event.target).css("color", selectedName);
+            
+            }
+        }
+
+        };
+        
+    self.stringStartsWith = function (string, startsWith) {          
+        string = string || "";
+        if (startsWith.length > string.length)
+            return false;
+        return string.substring(0, startsWith.length) === startsWith;
+    };
+        
+
+    //filter items using filter text.
+    self.filteredItems = ko.computed(function() {
+        var filter = self.filter().toLowerCase();
+        if (!filter) {
+            return self.locationsArray();
+        } else {
+            return ko.utils.arrayFilter(self.locationsArray(), function(Location) {
+                return self.stringStartsWith(Location.name().toLowerCase(), filter);
+            });
+        }
+    }, self.locationsArray);
+    
+    
     // Executes methods and listeners
     
     //Resize the map to be same size as window onload.
@@ -184,6 +238,7 @@ var ViewModel = function(){
     window.addEventListener('resize', self.resizeMap);
     //Draw the map
      google.maps.event.addDomListener(window, 'load', this.drawMap);
+     
      
 
 
