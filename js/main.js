@@ -1,3 +1,5 @@
+
+
 /*--------Model--------*/
 
 var places = [
@@ -80,6 +82,23 @@ var Location = function(data){
 };
 
 /*--------ViewModel--------*/
+
+//Asynchronously load google maps' API
+function loadScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC-l8J-1yZsmU4jAXluphw5gN-qUSh_uRA' +
+      '&signed_in=true&callback=initialize';
+  script.onerror = function(){
+        alert("Oops! Google maps could not be loaded, please try again later." );
+    };    
+    
+  document.body.appendChild(script);
+}
+
+function initialize(){
+    ko.applyBindings(new ViewModel());
+}
 
 var ViewModel = function(){
 
@@ -237,16 +256,11 @@ var ViewModel = function(){
     //Resize map when user resizes map
     window.addEventListener('resize', self.resizeMap);
     //Draw the map
-     google.maps.event.addDomListener(window, 'load', this.drawMap);
+    this.drawMap();
      
      
 
 
 }; //End of ViewModel
 
-
-ko.applyBindings(new ViewModel());
-
-
-
-
+window.onload = loadScript; // Call loadScript function onload.
