@@ -7,10 +7,15 @@
 
   <body>
       <div id="container">
+              
         <div id ="map"></div>
+
         <div id="sidebar">
             <h2 class= "title" >Kind Places in Portland, Oregon</h2>
-            <p class= "search">Search: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></p>
+            
+             <img class= "instagramIcon" src="images/instagramIcon.png" data-bind= "click: openInstagram">
+
+            <p class= "search">Search: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></p>            
               <ul data-bind= "foreach: filteredItems">
                 <li>
                   <h3 class= "placeName" data-bind= "text: name, click: $parent.showMarker"></h3>
@@ -19,6 +24,17 @@
                   <p class = "placeInfo" data-bind= "text: zipcode"></p>
                 </li> 
               </ul>
+        </div>
+        
+        <div class="photoPanel">
+          <p class = "closeInstagram" data-bind= "click: closeInstagram">X</p>
+          <h1 class="photoTitle">Vegan in Portland</h1>
+          <div class="photos">
+            
+          </div>
+          <!--<ul class="photos">
+            <li class = "photosList"></li>
+          </ul>-->
         </div>
     </div><!--end of container-->
     <script src="js/lib/knockout-3.3.0.js"></script>

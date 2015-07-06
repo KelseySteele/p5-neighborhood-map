@@ -10,7 +10,8 @@ var places = [
             zipcode: "97212",
             url: "http://blpdx.com",
             latitude: "45.535536",
-            longitude: "-122.650695"
+            longitude: "-122.650695",
+            tagName: "blossominglotusportland"
         },
         {
             name: "Food Fight! Grocery",
@@ -19,7 +20,8 @@ var places = [
             zipcode: "97214",
             url: "http://www.foodfightgrocery.com",
             latitude: "45.519718",
-            longitude: "-122.653300"                      
+            longitude: "-122.653300",
+            tagName: "foodfightgrocery"
         },
         {
             name: "Harlow",
@@ -28,7 +30,8 @@ var places = [
             zipcode: "97214",
             url: "http://www.harlowpdx.com/",
             latitude: "45.511974",
-            longitude: "-122.626056"                      
+            longitude: "-122.626056",
+            tagName: "harlowportland"
         },
         {
             name: "Herbivore Clothing Co.",
@@ -37,7 +40,8 @@ var places = [
             zipcode: "97209",
             url: "http://www.herbivoreclothing.com/",
             latitude: "45.519937",
-            longitude: "-122.653313"
+            longitude: "-122.653313",
+            tagName: "herbivoreclothingcompany"
         },
         {
             name: "Petunia's Pies & Pastries",
@@ -46,7 +50,8 @@ var places = [
             zipcode: "97205",
             url: "http://petuniaspiesandpastries.com/",
             latitude: "45.521157",
-            longitude: "-122.683692"                      
+            longitude: "-122.683692",
+            tagName: "petuniaspiesandpastries"
         },
         {
             name: "Portobello Vegan Trattoria",
@@ -55,7 +60,8 @@ var places = [
             zipcode: "97214",
             url: "http://portobellopdx.com/",
             latitude: "45.505438",
-            longitude: "-122.654195"                      
+            longitude: "-122.654195",
+            tagName: "portobellovegantrattoria"
         },
         {
             name: "Prasad",
@@ -64,7 +70,8 @@ var places = [
             zipcode: "97209",
             url: "http://www.prasadcuisine.com/",
             latitude: "45.524797",
-            longitude: "-122.680821"
+            longitude: "-122.680821",
+            tagName: "prasadcafe"
         }
 ];
 
@@ -80,6 +87,7 @@ var Location = function(data){
     this.latitude = ko.observable(data.latitude);
     this.longitude = ko.observable(data.longitude);
 };
+
 
 /*--------ViewModel--------*/
 
@@ -100,6 +108,8 @@ function initialize(){
     ko.applyBindings(new ViewModel());
 }
 
+
+
 var ViewModel = function(){
 
     //Variables
@@ -111,6 +121,10 @@ var ViewModel = function(){
     var selectedIcon = 'http://www.google.com/mapfiles/marker.png',
         normalIcon = 'https://www.google.com/mapfiles/marker_green.png',
         selectedName = 'purple',
+        instagramStartTag= 'veganportland', //Instagram tag when there are no locaitons selected.
+        instagramSelected= 'visible', //Instagram photo panel is visible.
+        instagramClosed= 'hidden', //Instagram photo panel is invisible.
+        initialTagName = "veganportland", //Instagram tag name when there are no locations selected.
         normalName = '#666666';
 
     //pushes places' property values into the array called locationsArray, so data can be used for markers
@@ -208,21 +222,62 @@ var ViewModel = function(){
     self.markerReset = function(){
         for(var j = 0; j < markersArray.length; j++){
             markersArray[j].setIcon(normalIcon);
+            self.nameReset();
         }
     };
     
+    //Open the Instagram display screen.
+    self.openInstagram = function(){
+        console.log("openInstagram is working!");
+        $(".photoPanel").css("visibility", instagramSelected);
+    }
+    
+    //Close the Instagram display screen.
+    self.closeInstagram = function(){
+        console.log("I can close!");
+        $(".photoPanel").css("visibility", instagramClosed);
+    }
+    
+    self.getInstagram = function(){
+        
+        var accessToken= "1105136919.eb73d41.ba4caf5b3107446bb36aa14afdebb8a8",
+        url = "https://api.instagram.com/v1/tags/" + initialTagName/*Location.this.tagName()*/ +
+        "/media/recent?access_token=" + accessToken;
+        
+        $.ajax({
+          type: "GET",
+          dataType: "jsonp",
+                cache: false,
+          url: url,
+          success: function(data) {
+            for (var i = 0; i < 6; i++) {
+                var linkURL = data.data[i].link;
+                var imageURL = data.data[i].images.low_resolution.url;
+              //$(".photos").append("<div class='kelsey'><a target='_blank' href='" + data.data[i].link + "'><img src='" +
+               //         data.data[i].images.low_resolution.url +"'></img></a></div>");
+               //$(".photos").append("<img src=" + imageURL + "></img>")//this works
+               $(".photos").append("<img  src=" + imageURL + " style='width:306px;height:306px;margin:5px;'>")
+            }
+          }
+        });
+        
+        
+        
+        
+    }
+    
 
-    //When name of location in sidebar is clicked, marker turns red.
+    //When name of location in sidebar is clicked, marker on map changes.
     self.showMarker = function(data, event){
         var nameClicked = $(event.target).text();
         self.nameReset();//Reset names' color of locations back to gray.
         self.markerReset(); //Reset markers to normalIcon.
         for (i=0; i< markersArray.length; i++) {
             if (nameClicked === markersArray[i].title) {
-                markersArray[i].setIcon(selectedIcon);
-               // Changes color of place name to purple when clicked.
+            // Makes the marker on map change color and display info window.
+            google.maps.event.trigger(markersArray[i], 'click');
+            // Changes color of place name to purple when clicked.
             $(event.target).css("color", selectedName);
-            
             }
         }
 
@@ -250,6 +305,9 @@ var ViewModel = function(){
     
     
     // Executes methods and listeners
+    
+    //Load Instagram pictures.
+    self.getInstagram();
     
     //Resize the map to be same size as window onload.
     self.resizeMap();
