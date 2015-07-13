@@ -4,42 +4,32 @@
     <link rel="stylesheet" href="css/style.css">
      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   </head>
-
   <body>
       <div id="container">
-              
         <div id ="map"></div>
-
         <div id="sidebar">
             <h2 class= "title" >Kind Places in Portland, Oregon</h2>
-            
              <img class= "instagramIcon" src="images/instagramIcon.png" data-bind= "click: openInstagram">
-
-            <p class= "search">Search: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></p>            
+            <p class= "search">Search: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></p>
               <ul data-bind= "foreach: filteredItems">
                 <li>
                   <h3 class= "placeName" data-bind= "text: name, click: $parent.showMarker"></h3>
-                  <p class = "placeInfo" data-bind= "text: hours"></p>
-                  <p class = "placeInfo" data-bind= "text: address"></p>
-                  <p class = "placeInfo" data-bind= "text: zipcode"></p>
+                    <p class = "placeInfo" data-bind= "text: hours"></p>
+                    <p class = "placeInfo" data-bind= "text: address"></p>
+                    <p class = "placeInfo" data-bind= "text: zipcode"></p>
                 </li> 
               </ul>
         </div>
-        
         <div class="photoPanel">
           <p class = "closeInstagram" data-bind= "click: closeInstagram">X</p>
-          <h1 class="photoTitle">Vegan in Portland</h1>
-          <div class="photos">
-            
-          </div>
-          <!--<ul class="photos">
-            <li class = "photosList"></li>
-          </ul>-->
+            <h1 class="photoTitle" id="locationName" data-bind="text: currentLocation">
+            </h1>
+              <div id="photos" class="photos">
+              </div>
         </div>
     </div><!--end of container-->
     <script src="js/lib/knockout-3.3.0.js"></script>
   <script src="js/main.js"></script>
-
   </body>
 </html>
 
