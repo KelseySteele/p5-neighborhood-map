@@ -290,7 +290,7 @@ var ViewModel = function(){
         //self.getInstagram(nameClicked);
         self.nameReset();//Reset names' color of locations back to gray.
         self.markerReset(); //Reset markers to normalIcon.
-        for (i=0; i< markersArray.length; i++) {
+        for (var i=0; i< markersArray.length; i++) {
             if (nameClicked === markersArray[i].title) {
             // Makes the marker on map change color and display info window.
             google.maps.event.trigger(markersArray[i], 'click');

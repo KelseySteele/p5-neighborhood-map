@@ -1,17 +1,14 @@
-
-html, body, #map {
-                /*height: 100%;*/
-                margin: 0;
-                padding: 0;
+/*Neighborhood Map CSS rules*/
+html,
+body,
+.map {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
 }
- 
-/*#container {
-  position: relative;
-  height: 100%;
-  width: 100%;
-}*/
 
-#sidebar {
+/** @group sidebar */
+.sidebar {
   position: absolute;
   top: 0;
   left: 0;
@@ -21,6 +18,7 @@ html, body, #map {
   background-color: white;
   opacity: .8;
   padding-left: 10px;
+  list-style-type: none;
   overflow: scroll;
 }
 
@@ -30,59 +28,24 @@ html, body, #map {
   cursor: pointer;
 }
 
-.photoPanel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 100;
-  width: 400px;
-  height: 97%;
-  background-color: #EDEDED;
-  opacity: .9;
-  padding-left: 10px;
-  overflow: scroll;
-  visibility: hidden;
-  /*font-family: sans-serif;*/
-
-}
-
-.photoTitle {
-  text-align: center;
-  font-family: sans-serif;
-  font-size: 36px;
-  padding: 20px;
-  font-weight: bold;
-  color: #006666;
-}
-
-  
-.closeInstagram {
-  font-family: sans-serif;
-  cursor: pointer;
-  float: right;
-  right: 30px;
-  padding-right: 20px;
-}
-
-
 .search {
   font-family: sans-serif;
-  color: #666666;
+  color: #666;
   font-size: 1.0em;
   text-align: center;
 }
 
 .title {
-  color: #006666;
+  color: #066;
   font-family: sans-serif;
-  font-size: 1.5em;
+  font-size: 2em;
   text-align: center;
 }
 
 .placeName {
-  color: #666666;
+  color: #666;
   font-family: sans-serif;
-  font-size: 1.2em;
+  font-size: 1.5em;
   padding-bottom: 0;
   margin-bottom: -7px;
   cursor: pointer;
@@ -94,68 +57,59 @@ html, body, #map {
   font-size: .95em;
 }
 
-/*ul{
-   list-style-type: none;
-}*/
+/** @group Instagram photos */
+.photoPanel {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+  background-color: #ededed;
+  opacity: .9;
+  padding-left: 10px;
+  margin: 0 auto 0 auto;
+  visibility: hidden;
+}
 
 .photoTitle {
-  padding: 10px 20px 10px 40px;
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 36px;
+  padding: 20px;
+  font-weight: bold;
+  color: #066;
 }
- 
-/*img {
+
+.closeInstagram {
+  font-family: sans-serif;
+  cursor: pointer;
+  float: right;
+  right: 30px;
+  padding-right: 20px;
+}
+.imgInstagram {
   border-radius: 10px;
-  border: 1px solid #DEDEDE;
+  border: 1px solid #dedede;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-}*/
- 
-/*.photoPanel {
-  /*just testing here
-  width: 400px;
-  background: #EDEDED;
-}*/
- 
-/*.photos li {
-  display: inline-block;
   width: 306px;
   height: 306px;
-  margin: 0 20px 20px 0;
-}
- 
-.photos {
-  /*Mobile first - display one column of photos on small screens
-  margin: auto;*/
-  /*Display on top of list view with some opacity
-  opacity: .8;
-  z-index: 100;*/
-  /*Need to add position relative and top, left
-
-}*/
- 
- 
-.photos li, .latest li {
-  display: inline-block;
-  /*width: 306px;*/
-  height: 306px;
-  margin: 0px 20px 20px 0px;
-  border-radius: 10px;
-  border: 1px solid #DEDEDE;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  margin: 5px;
 }
 
-.photos, .latest {
+/** @group responsive design */
+.photos,
+latest {
+  /*Mobile first - display one column of photos on small screens*/
   margin: auto;
 }
- 
+
 @media only screen and (min-width: 670px) {
-    /* For tablet display 2 columns of photos */
-   .photoPanel {width: 730px;}
-   .photos {width: 660px;}
+  /* For tablet display 2 columns of photos */
+  .photoPanel {width: 730px;}
+  .photos {width: 660px;}
 }
  
 @media only screen and (min-width: 1004px) {
-    /* For desktop display 3 columns of photos*/
+  /* For desktop display 3 columns of photos*/
   .photoPanel {width: 1040px;}
   .photos {width: 1004px;}
 }
-
-
