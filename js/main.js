@@ -198,6 +198,8 @@ var ViewModel = function(){
                    infowindow.open(map,marker);
                    //Change the marker when clicked
                    this.setIcon(selectedIcon);
+                   //Pan to selected marker
+                   map.panTo(marker.getPosition());
                    self.currentLocation(this.title); //Sets the header of the photoPanel to the currently clicked marker's name. 
                    self.getInstagram();
                 };
