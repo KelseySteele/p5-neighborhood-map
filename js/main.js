@@ -1,5 +1,7 @@
 
 /*--------Model--------*/
+"use strict";
+
 var places = [
         {
             name: "Blossoming Lotus",
@@ -106,9 +108,9 @@ function initialize(){
 var ViewModel = function(){
     //Variables
     var self = this; //Self is the ViewModel Object.
-    this.locationsArray = ko.observableArray([]); //not sure why adding this here worked? this is the individual locations within places? 
+    this.locationsArray = ko.observableArray();
     self.filter = ko.observable(""); // Stores the search box text. It is intitially empty
-    markersArray = [];
+    var markersArray = [];
     //Marker icons based on selection state.
     var selectedIcon = 'images/purpleMarker.png',
         normalIcon = 'images/turquoiseMarker.png',
@@ -151,10 +153,11 @@ var ViewModel = function(){
             });
 
         var i= 0;
-        for (i=0; i< self.locationsArray().length; i++) {
+        var len = self.locationsArray().length; 
+        //var len = self.locationsArray().length;
+        for (i=0; i < len; i++) {
             //Get streetview from Google.
-            var streetViewUrl = 'http://maps.googleapis.com/maps/api/streetview?size=200x200&location=' + self.locationsArray()[i].latitude() + ','
-            + self.locationsArray()[i].longitude();
+            var streetViewUrl = 'http://maps.googleapis.com/maps/api/streetview?size=200x200&location=' + self.locationsArray()[i].latitude() + ','+ self.locationsArray()[i].longitude();
             //Add infoWindow
            var contentString = '<div id="content">' +
                '<h3>' + self.locationsArray()[i].name() + '</h3>' +
@@ -199,7 +202,7 @@ var ViewModel = function(){
                    self.getInstagram();
                 };
             })(marker, contentString, infowindow));                
-        } //End of loop for all locations within locationsArray.
+        }//End of loop for all locations within locationsArray.
     }; //End of drawMap
 
     //Reset previously clicked place names in sidebar back to normal gray color. 
@@ -217,12 +220,12 @@ var ViewModel = function(){
     //Open the Instagram display screen/photoPanel div.
     self.openInstagram = function(){
         $(".photoPanel").css("visibility", instagramSelected);
-    }
+    };
 
     //Close the Instagram display screen/photoPanel div.
     self.closeInstagram = function(){
         $(".photoPanel").css("visibility", instagramClosed);
-    }
+    };
 
     //Changes the photoPanel div's header and Instagram back to the default location and instagram tagName.
     self.resetInstagram = function(){
@@ -230,7 +233,7 @@ var ViewModel = function(){
             self.nameReset();
             self.currentLocation(defaultLocation);
             self.getInstagram();
-    }
+    };
 
     //Calls Instagram's API. 
     self.getInstagram = function(){
@@ -269,7 +272,7 @@ var ViewModel = function(){
               }
 
             }).error(function(e){
-                $(".photoPanel").text("Oops! Instagram's photos could not be loaded. Please try again later.")
+                $(".photoPanel").text("Oops! Instagram's photos could not be loaded. Please try again later.");
                 });
         };// End of getInstagram function.
 
@@ -279,7 +282,7 @@ var ViewModel = function(){
         while (instagramPhotos.hasChildNodes()){
             instagramPhotos.removeChild(instagramPhotos.firstChild);
         }
-    }
+    };
 
     //When name of location in sidebar is clicked, marker on map changes.
     self.showMarker = function(data, event){
@@ -322,14 +325,12 @@ var ViewModel = function(){
     // Executes methods and listeners
     //Load Instagram pictures.
     self.getInstagram();
-
     //Resize the map to be same size as window onload.
     self.resizeMap();
     //Resize map when user resizes map
     window.addEventListener('resize', self.resizeMap);
     //Draw the map
-    this.drawMap();
-
+    self.drawMap();
 
 }; //End of ViewModel
 
