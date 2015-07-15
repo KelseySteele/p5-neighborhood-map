@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width", initial-scale=1, maximum-scale=1, user-scalable=no"/>
-     <link rel="stylesheet" href="css/style.css">
+    <title>Neighborhood Map of Portland, Oregon</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="css/offline-theme-default.css">
+      <link rel="stylesheet" href="css/offline-language-english.css">
+      <script src="js/lib/offline.min.js"></script>
+      <script>
+        var run = function() {
+            if (Offline.state === 'up') {
+                Offline.check();
+            }
+        };
+        setInterval(run, 5000);
+      </script>
   </head>
   <body>
       <div id="container">
         <div id ="map" class="map"></div>
         <div id="sidebar" class= "sidebar">
             <h2 class= "title" >Kind Places in Portland, Oregon</h2>
-             <img class= "instagramIcon" src="images/instagramIcon.png" data-bind= "click: openInstagram">
+             <img class= "instagramIcon" src="images/instagramIcon.png" alt= "Instagram Icon" data-bind= "click: openInstagram">
             <p class= "search">Search: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></p>
               <ul data-bind= "foreach: filteredItems">
                 <li>
@@ -30,7 +42,6 @@
     </div><!--end of container-->
     <script src="js/lib/knockout-3.3.0.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-</script>
   <script src="js/main.js"></script>
   </body>
 </html>

@@ -164,8 +164,8 @@ var ViewModel = function(){
                '<p>Address: ' + self.locationsArray()[i].address() + '</p>' +
                '<p>Zipcode: ' + self.locationsArray()[i].zipcode() + '</p>' +
                '<p>Hours: ' + self.locationsArray()[i].hours() + '</p>' +
-               '<p>' + self.locationsArray()[i].url() + '</p>' +
-                '<img class="smImg" src="' + streetViewUrl + '">' +
+               '<p><a href="' + self.locationsArray()[i].url() + '" target="_blank">' + self.locationsArray()[i].url() + '</a></p>' +
+               '<img class="smImg" src="' + streetViewUrl + '">' +
                '</div>';
 
            //Adds latitude and longitude value to each marker
