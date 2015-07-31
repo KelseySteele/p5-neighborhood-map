@@ -133,7 +133,7 @@ var ViewModel = function(){
     //Makes the map height equal to the hight of the browser window. Google map requires that the hight of the map be defined in pixels
     //and not as 100%. 
     self.resizeMap = function(){
-            $(function(){ //why is there a function within a function here? 
+            $(function(){
                 $("#map").css("height", $(window).height());
         });
     };
@@ -272,7 +272,6 @@ var ViewModel = function(){
                 $(".photos").append("<img src='" + imageURL + "' class='imgInstagram'></img>");
                 }
               }
-
             }).error(function(e){
                 $(".photoPanel").text("Oops! Instagram's photos could not be loaded. Please try again later.");
                 });
@@ -323,7 +322,6 @@ var ViewModel = function(){
             });
         }
     }, self.locationsArray);
-
     // Executes methods and listeners
     //Load Instagram pictures.
     self.getInstagram();
